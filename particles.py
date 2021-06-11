@@ -1,8 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-particles = np.random.randint(0, 100, [100, 2]).astype(float)
-velocity = np.zeros([100, 2], dtype=float)
+num = 1000
+resolution = 200
+frames = 200
+
+particles = np.random.randint(0, resolution, [num, 2]).astype(float)
+velocity = np.zeros([num, 2], dtype=float)
 
 # canvas[np.ix_(*particles.T)] = 1
 
@@ -13,11 +17,11 @@ velocity = np.zeros([100, 2], dtype=float)
 
 # plt.axis([0, 10, 0, 1])
 
-center = [50.] * 2
+center = [resolution / 2.] * 2
 g = 1
 
-for i in range(200):
-    for j in range(100):
+for i in range(frames):
+    for j in range(num):
         p = particles[j]
         d = center - p
         r = np.clip(np.linalg.norm(d), 5, 10e3)
@@ -25,11 +29,11 @@ for i in range(200):
         # particles[j] += velocity[j]
 
     particles += velocity
-    particles = particles % 100
+    particles = particles % resolution
 
-    canvas = np.zeros([100, 100])
+    canvas = np.zeros([resolution]*2)
     # canvas[np.arange(canvas.shape[0])[:, None], particles.astype(int)] = 1
-    for j in range(100):
+    for j in range(num):
         p = particles[j].astype(int)
         index = tuple(p)
         canvas[index] = 1
