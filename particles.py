@@ -42,7 +42,7 @@ for i in range(frames):
     for j in range(num):
         p = particles[j].astype(int)
         index = tuple(p)
-        canvas[index] = 1
+        canvas[index] = np.linalg.norm(velocity[j]) + 1
 
     frame = ax.imshow(canvas, animated=True)
     sequence.append([frame])
