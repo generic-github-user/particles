@@ -4,13 +4,23 @@ import matplotlib.animation as animation
 from matplotlib.animation import PillowWriter
 from celluloid import Camera
 
-num = 100
+num = 1000
 resolution = 200
-frames = 200
+frames = 20
 g = 1
+center = [resolution / 2.] * 2
 
-particles = np.random.randint(0, resolution, [num, 2]).astype(float)
-velocity = np.zeros([num, 2], dtype=float)
+particles = np.random.uniform(0, resolution, [num, 2]).astype(float)
+# velocity = np.zeros([num, 2], dtype=float)
+offset = np.zeros_like(particles)
+for j in range(num):
+    p = particles[j]
+    d = center - p
+    # r = np.clip(np.linalg.norm(d), 5, 10e3)
+    offset[j] = d
+
+# np.ones([num, 2], dtype=float)
+velocity = -np.flip(np.clip(offset, -10e3, 10e3)) * 0.02
 
 # canvas[np.ix_(*particles.T)] = 1
 
@@ -21,7 +31,6 @@ velocity = np.zeros([num, 2], dtype=float)
 
 # plt.axis([0, 10, 0, 1])
 
-center = [resolution / 2.] * 2
 fig, ax = plt.subplots()
 sequence = []
 
@@ -32,10 +41,12 @@ for i in range(frames):
         d = center - p
         r = np.clip(np.linalg.norm(d), 5, 10e3)
         velocity[j] += d * (g / (r ** 2))
+    # print(velocity[j], d * (g / (r ** 2)))
         # particles[j] += velocity[j]
 
     particles += velocity
-    particles = particles % resolution
+    # particles = particles % resolution
+    particles = np.clip(particles, 0, resolution-1)
 
     canvas = np.zeros([resolution]*2)
     # canvas[np.arange(canvas.shape[0])[:, None], particles.astype(int)] = 1
