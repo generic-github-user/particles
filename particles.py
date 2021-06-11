@@ -25,10 +25,6 @@ velocity = -np.flip(np.clip(offset, -10e3, 10e3)) * 0.02
 # canvas[np.ix_(*particles.T)] = 1
 
 # print(np.mgrid[particles.T])
-
-# plt.imshow(canvas)
-# plt.show()
-
 # plt.axis([0, 10, 0, 1])
 
 fig, ax = plt.subplots()
@@ -60,21 +56,7 @@ for i in range(frames):
     camera.snap()
     print('Rendered frame {}'.format(i+1))
 
-    # plt.clf()
-    # plt.imshow(canvas)
-    # plt.pause(0.01)
-    # plt.axis('off')
-
-# plt.show()
-
 ani = animation.ArtistAnimation(fig, sequence, interval=10, blit=True, repeat_delay=0)
-
-# To save the animation, use e.g.
-#
-# ani.save("movie.mp4")
-#
-# or
-#
 
 # writer = animation.FFMpegWriter(fps=15, metadata=dict(artist='Me'), bitrate=1800)
 # writer = PillowWriter(fps=20, codec='libx264', bitrate=20)
