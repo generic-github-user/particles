@@ -35,24 +35,30 @@ for i in range(frames):
     for j in range(num):
         p = particles[j]
         d = center - p
+        # Calculate distance between point and target
         r = np.clip(np.linalg.norm(d), 5, 10e3)
+        # Adjust velocity based on force of gravity
         velocity[j] += d * (g / (r ** 2))
     # print(velocity[j], d * (g / (r ** 2)))
         # particles[j] += velocity[j]
 
     particles += velocity
     # particles = particles % resolution
+    # Limit particle locations to visible frame
     particles = np.clip(particles, 0, resolution-1)
 
     canvas = np.zeros([resolution]*2)
     # canvas[np.arange(canvas.shape[0])[:, None], particles.astype(int)] = 1
     for j in range(num):
+        # Convert the particle location to an index on the image grid
         p = particles[j].astype(int)
         index = tuple(p)
+        # Use particle velocity as color
         canvas[index] = np.linalg.norm(velocity[j]) + 1
 
     frame = ax.imshow(canvas, animated=True)
     sequence.append([frame])
+    # Capture the current frame for rendering
     camera.snap()
     print('Rendered frame {}'.format(i+1))
 
